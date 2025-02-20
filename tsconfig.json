@@ -1,0 +1,43 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        /** Path resolution */
+        "baseUrl": ".",
+        "paths": {
+            "~/*": ["./src/*"]
+        },
+
+        /** Base Options */
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "target": "ES2022",
+        "lib": ["ES2022", "DOM"],
+        "allowJs": true,
+        "resolveJsonModule": true,
+        "moduleDetection": "force",
+        "isolatedModules": true,
+
+        /** Keep TSC performant in monorepos */
+        "incremental": true,
+        "disableSourceOfProjectReferenceRedirect": true,
+        "tsBuildInfoFile": "${configDir}/.cache/tsbuildinfo.json",
+
+        /** Strictness */
+        "strict": true,
+        "checkJs": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noUncheckedIndexedAccess": true,
+        "noFallthroughCasesInSwitch": true,
+        "forceConsistentCasingInFileNames": true,
+
+        /** Transpile using Bundler (not tsc) */
+        "module": "ES2022",
+        "moduleResolution": "Bundler",
+        "noEmit": true,
+
+        "outDir": "./dist"
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"]
+}

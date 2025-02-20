@@ -1,0 +1,22 @@
+{
+    "name": "pr-jira-ticket",
+    "version": "0.1.0",
+    "description": "",
+    "packageManager": "pnpm@10.4.1",
+    "scripts": {
+        "format": "prettier --check .",
+        "format:fix": "prettier --write .",
+        "lint": "eslint --cache --cache-location .cache/.eslintcache",
+        "lint:fix": "eslint --fix --cache --cache-location .cache/.eslintcache",
+        "typecheck": "tsc",
+        "build": "esbuild src/main.ts --bundle --outfile=dist/main.js --platform=node --minify"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.20.0",
+        "esbuild": "^0.25.0",
+        "eslint": "^9.20.1",
+        "prettier": "^3.5.1",
+        "typescript": "^5.7.3",
+        "typescript-eslint": "^8.24.1"
+    }
+}

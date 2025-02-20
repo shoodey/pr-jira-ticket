@@ -1,0 +1,10 @@
+name: PR Jira Ticket
+description: Extract Jira Ticket from PR title and add it to the PR description
+
+branding:
+  icon: "layout"
+  color: "blue"
+
+runs:
+  using: "node20"
+  main: "dist/main.js"
