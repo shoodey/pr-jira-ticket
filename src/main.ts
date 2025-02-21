@@ -6,13 +6,15 @@ const run = () => {
     const jiraProjectKey = getInput("JIRA_PROJECT_KEY", { required: true });
     const jiraTicketPlaceholder = getInput("JIRA_TICKET_PLACEHOLDER");
 
-    const payload = context.payload;
+    const pullRequest = context.payload.pull_request;
+    const event = context.eventName;
 
     console.debug({
         githubToken,
         jiraProjectKey,
         jiraTicketPlaceholder,
-        payload,
+        pullRequest,
+        event,
     });
 };
 
