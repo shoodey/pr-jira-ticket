@@ -1,11 +1,12 @@
 name: Static Code Analysis
 
 on:
-  push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
-  merge_group:
+  workflow_dispatch:
+  # push:
+  #   branches: ["main"]
+  # pull_request:
+  #   branches: ["main"]
+  # merge_group:
 
 jobs:
   format:
