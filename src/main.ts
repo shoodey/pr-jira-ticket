@@ -18,7 +18,7 @@ const run = () => {
             jiraTicket,
         });
     } catch (error) {
-        setFailed(`Error: ${error instanceof Error ? error.message : String(error)}`);
+        setFailed(error instanceof Error ? error.message : String(error));
     }
 };
 
