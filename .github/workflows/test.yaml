@@ -9,6 +9,8 @@ on:
 
 jobs:
   test:
+    permissions:
+      pull-requests: write
     name: Test
     runs-on: ubuntu-latest
     steps:
