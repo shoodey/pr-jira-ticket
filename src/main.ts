@@ -1,21 +1,22 @@
-import { getInput } from "@actions/core";
-import { context } from "@actions/github";
+import { setFailed } from "@actions/core";
+import { parsePullRequest, parseInputs } from "~/utils";
 
 const run = () => {
-    const githubToken = getInput("GITHUB_TOKEN", { required: true });
-    const jiraProjectKey = getInput("JIRA_PROJECT_KEY", { required: true });
-    const jiraTicketPlaceholder = getInput("JIRA_TICKET_PLACEHOLDER");
+    try {
+        const { number, title, body } = parsePullRequest();
+        const { githubToken, jiraProjectKey, jiraTicketPlaceholder } = parseInputs();
 
-    const pullRequest = context.payload.pull_request;
-    const event = context.eventName;
-
-    console.debug({
-        githubToken,
-        jiraProjectKey,
-        jiraTicketPlaceholder,
-        pullRequest,
-        event,
-    });
+        console.debug({
+            number,
+            title,
+            body,
+            githubToken,
+            jiraProjectKey,
+            jiraTicketPlaceholder,
+        });
+    } catch (error) {
+        setFailed(`Error: ${error instanceof Error ? error.message : String(error)}`);
+    }
 };
 
 run();
