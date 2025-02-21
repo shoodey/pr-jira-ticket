@@ -1,6 +1,18 @@
 name: PR Jira Ticket
 description: Extract Jira Ticket from PR title and add it to the PR description
 
+inputs:
+  GITHUB_TOKEN:
+    description: "GitHub token"
+    required: true
+  JIRA_PROJECT_KEY:
+    description: "Jira project key"
+    required: true
+  JIRA_TICKET_PLACEHOLDER:
+    description: "Jira ticket placeholder"
+    required: false
+    default: "{{JIRA_TICKET}}"
+
 branding:
   icon: "layout"
   color: "blue"
