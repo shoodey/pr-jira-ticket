@@ -1,5 +1,5 @@
 import { setFailed } from "@actions/core";
-import { parsePullRequest, parseInputs, extractTicket, insertTicket, setBody } from "~/utils";
+import { parsePullRequest, parseInputs, extractTicket, getAmendedBody, setBody } from "~/utils";
 
 const run = async () => {
     try {
@@ -7,7 +7,7 @@ const run = async () => {
         const { token, projectKey, placeholder } = parseInputs();
 
         const ticket = extractTicket(title, projectKey);
-        const amendedBody = insertTicket(body, ticket, placeholder);
+        const amendedBody = getAmendedBody(body, ticket, placeholder);
 
         await setBody(token, pullNumber, amendedBody, ticket);
     } catch (error) {

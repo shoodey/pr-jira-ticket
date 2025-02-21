@@ -38,7 +38,7 @@ export const extractTicket = (title: string, projectKey: string) => {
     return match[0];
 };
 
-export const insertTicket = (body: string | undefined, ticket: string, placeholder: string) => {
+export const getAmendedBody = (body: string | undefined, ticket: string, placeholder: string) => {
     if (body?.includes(placeholder)) {
         console.debug(`✅ Placeholder "${placeholder}" found in description, replacing with "${ticket}"`);
         return body.replace(placeholder, ticket);
@@ -50,6 +50,9 @@ export const insertTicket = (body: string | undefined, ticket: string, placehold
 
 export const setBody = async (token: string, pullNumber: number, body: string, ticket: string) => {
     const octokit = getOctokit(token);
+
+    // TODO: Sanity check, remove this
+    console.debug({ body });
 
     await octokit.rest.pulls.update({
         owner: context.repo.owner,
