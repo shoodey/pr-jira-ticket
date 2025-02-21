@@ -1,7 +1,7 @@
 import { getInput } from "@actions/core";
 import { context } from "@actions/github";
 
-export function run() {
+const run = () => {
     const githubToken = getInput("GITHUB_TOKEN", { required: true });
     const jiraProjectKey = getInput("JIRA_PROJECT_KEY", { required: true });
     const jiraTicketPlaceholder = getInput("JIRA_TICKET_PLACEHOLDER");
@@ -14,4 +14,6 @@ export function run() {
         jiraTicketPlaceholder,
         payload,
     });
-}
+};
+
+run();
