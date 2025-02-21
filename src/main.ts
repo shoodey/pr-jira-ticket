@@ -1,10 +1,12 @@
 import { setFailed } from "@actions/core";
-import { parsePullRequest, parseInputs } from "~/utils";
+import { parsePullRequest, parseInputs, parsePullRequestTitle } from "~/utils";
 
 const run = () => {
     try {
         const { number, title, body } = parsePullRequest();
         const { githubToken, jiraProjectKey, jiraTicketPlaceholder } = parseInputs();
+
+        const jiraTicket = parsePullRequestTitle(title, jiraProjectKey);
 
         console.debug({
             number,
@@ -13,6 +15,7 @@ const run = () => {
             githubToken,
             jiraProjectKey,
             jiraTicketPlaceholder,
+            jiraTicket,
         });
     } catch (error) {
         setFailed(`Error: ${error instanceof Error ? error.message : String(error)}`);

@@ -21,8 +21,19 @@ export const parsePullRequest = () => {
     const pullRequest = context.payload.pull_request as PullRequest;
 
     if (!pullRequest) {
-        throw new Error("This action can only be run on pull_request events");
+        throw new Error("This action can only run on pull request events");
     }
 
     return pullRequest;
+};
+
+export const parsePullRequestTitle = (title: string, jiraProjectKey: string) => {
+    const regex = new RegExp(`\\b${jiraProjectKey}-\\d+\\b`, "i");
+    const jiraTicket = title.match(regex);
+
+    if (!jiraTicket) {
+        throw new Error(`Could not find JIRA ticket for "${jiraProjectKey}" in pull request title: "${title}"`);
+    }
+
+    return jiraTicket[0];
 };
