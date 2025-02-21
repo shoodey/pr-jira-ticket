@@ -1,19 +1,19 @@
 import { getInput } from "@actions/core";
-import { context } from "@actions/github";
+import { context, getOctokit } from "@actions/github";
 import type { WebhookPayload } from "@actions/github/lib/interfaces";
 
-// TODO: Use either @octokit/types or @octokit/webhooks-types to get the correct types
+// TODO: Maybe use either @octokit/types or @octokit/webhooks-types to get the missing properties
 type PullRequest = (WebhookPayload["pull_request"] & { title: string }) | undefined;
 
 export const parseInputs = () => {
-    const githubToken = getInput("GITHUB_TOKEN", { required: true });
-    const jiraProjectKey = getInput("JIRA_PROJECT_KEY", { required: true });
-    const jiraTicketPlaceholder = getInput("JIRA_TICKET_PLACEHOLDER");
+    const token = getInput("GITHUB_TOKEN", { required: true });
+    const projectKey = getInput("JIRA_PROJECT_KEY", { required: true });
+    const placeholder = getInput("JIRA_TICKET_PLACEHOLDER");
 
     return {
-        githubToken,
-        jiraProjectKey,
-        jiraTicketPlaceholder,
+        token,
+        projectKey,
+        placeholder,
     };
 };
 
@@ -27,13 +27,36 @@ export const parsePullRequest = () => {
     return pullRequest;
 };
 
-export const parsePullRequestTitle = (title: string, jiraProjectKey: string) => {
-    const regex = new RegExp(`\\b${jiraProjectKey}-\\d+\\b`, "i");
+export const extractTicket = (title: string, projectKey: string) => {
+    const regex = new RegExp(`\\b${projectKey}-\\d+\\b`, "i");
     const match = title.match(regex);
 
     if (!match) {
-        throw new Error(`Could not find JIRA ticket for "${jiraProjectKey}" in pull request title: "${title}"`);
+        throw new Error(`Could not find JIRA ticket for "${projectKey}" in pull request title: "${title}"`);
     }
 
     return match[0];
+};
+
+export const insertTicket = (body: string | undefined, ticket: string, placeholder: string) => {
+    if (body?.includes(placeholder)) {
+        console.debug(`✅ Placeholder "${placeholder}" found in description, replacing with "${ticket}"`);
+        return body.replace(placeholder, ticket);
+    }
+
+    console.debug(`⚠️ Placeholder "${placeholder}" not found in description, prepending "${ticket}" to description`);
+    return `${ticket}\n\n${body}`;
+};
+
+export const setBody = async (token: string, pullNumber: number, body: string, ticket: string) => {
+    const octokit = getOctokit(token);
+
+    await octokit.rest.pulls.update({
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        pull_number: pullNumber,
+        body,
+    });
+
+    console.debug(`✅ Successfully updated pull request #${pullNumber}'s description with JIRA ticket ${ticket}`);
 };

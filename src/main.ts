@@ -1,25 +1,18 @@
 import { setFailed } from "@actions/core";
-import { parsePullRequest, parseInputs, parsePullRequestTitle } from "~/utils";
+import { parsePullRequest, parseInputs, extractTicket, insertTicket, setBody } from "~/utils";
 
-const run = () => {
+const run = async () => {
     try {
-        const { number, title, body } = parsePullRequest();
-        const { githubToken, jiraProjectKey, jiraTicketPlaceholder } = parseInputs();
+        const { number: pullNumber, title, body } = parsePullRequest();
+        const { token, projectKey, placeholder } = parseInputs();
 
-        const jiraTicket = parsePullRequestTitle(title, jiraProjectKey);
+        const ticket = extractTicket(title, projectKey);
+        const amendedBody = insertTicket(body, ticket, placeholder);
 
-        console.debug({
-            number,
-            title,
-            body,
-            githubToken,
-            jiraProjectKey,
-            jiraTicketPlaceholder,
-            jiraTicket,
-        });
+        await setBody(token, pullNumber, amendedBody, ticket);
     } catch (error) {
-        setFailed(error instanceof Error ? error.message : String(error));
+        setFailed(`❌ ${error instanceof Error ? error.message : String(error)}`);
     }
 };
 
-run();
+void run();
