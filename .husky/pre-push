@@ -1,1 +1,1 @@
-pnpm build
+pnpm build && git diff --quiet dist/ || (echo '❌ Make sure to amend commit with updated dist/'; exit 1)
