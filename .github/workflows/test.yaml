@@ -1,12 +1,16 @@
 name: Test action
 
 on:
-  # workflow_dispatch:
+  workflow_dispatch:
   push:
+    branches: ["main"]
+  pull_request:
     branches: ["main"]
 
 jobs:
   test:
+    permissions:
+      pull-requests: write
     name: Test
     runs-on: ubuntu-latest
     steps:

@@ -1,21 +1,18 @@
-import { getInput } from "@actions/core";
-import { context } from "@actions/github";
+import { setFailed } from "@actions/core";
+import { parsePullRequest, parseInputs, extractTicket, getAmendedBody, setBody } from "~/utils";
 
-const run = () => {
-    const githubToken = getInput("GITHUB_TOKEN", { required: true });
-    const jiraProjectKey = getInput("JIRA_PROJECT_KEY", { required: true });
-    const jiraTicketPlaceholder = getInput("JIRA_TICKET_PLACEHOLDER");
+const run = async () => {
+    try {
+        const { pullNumber, title, body } = parsePullRequest();
+        const { token, projectKey, placeholder } = parseInputs();
 
-    const pullRequest = context.payload.pull_request;
-    const event = context.eventName;
+        const ticket = extractTicket(title, projectKey);
+        const amendedBody = getAmendedBody(body, ticket, placeholder);
 
-    console.debug({
-        githubToken,
-        jiraProjectKey,
-        jiraTicketPlaceholder,
-        pullRequest,
-        event,
-    });
+        await setBody(token, pullNumber, amendedBody, ticket);
+    } catch (error) {
+        setFailed(`❌ ${error instanceof Error ? error.message : String(error)}`);
+    }
 };
 
-run();
+void run();
