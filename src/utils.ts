@@ -29,11 +29,11 @@ export const parsePullRequest = () => {
 
 export const parsePullRequestTitle = (title: string, jiraProjectKey: string) => {
     const regex = new RegExp(`\\b${jiraProjectKey}-\\d+\\b`, "i");
-    const jiraTicket = title.match(regex);
+    const match = title.match(regex);
 
-    if (!jiraTicket) {
+    if (!match) {
         throw new Error(`Could not find JIRA ticket for "${jiraProjectKey}" in pull request title: "${title}"`);
     }
 
-    return jiraTicket[0];
+    return match[0];
 };
