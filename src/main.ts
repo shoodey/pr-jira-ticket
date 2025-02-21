@@ -3,7 +3,7 @@ import { parsePullRequest, parseInputs, extractTicket, getAmendedBody, setBody }
 
 const run = async () => {
     try {
-        const { number: pullNumber, title, body } = parsePullRequest();
+        const { pullNumber, title, body } = parsePullRequest();
         const { token, projectKey, placeholder } = parseInputs();
 
         const ticket = extractTicket(title, projectKey);

@@ -10,6 +10,7 @@
         "lint:fix": "eslint --fix --cache --cache-location .cache/.eslintcache",
         "typecheck": "tsc",
         "build": "esbuild src/main.ts --bundle --outfile=dist/main.js --platform=node --minify",
+        "test": "vitest",
         "prepare": "husky"
     },
     "dependencies": {
@@ -18,11 +19,13 @@
     },
     "devDependencies": {
         "@eslint/js": "^9.20.0",
+        "dedent": "^1.5.3",
         "esbuild": "^0.25.0",
         "eslint": "^9.20.1",
         "husky": "^9.1.7",
         "prettier": "^3.5.1",
         "typescript": "^5.7.3",
-        "typescript-eslint": "^8.24.1"
+        "typescript-eslint": "^8.24.1",
+        "vitest": "^3.0.6"
     }
 }
